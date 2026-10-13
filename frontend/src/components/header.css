@@ -1,0 +1,43 @@
+/* =============================================
+   header.css — Header Component Styles
+   ============================================= */
+
+/* Header bar at the top of every page */
+.header {
+  background-color: #ffffff;
+  border-bottom: 2px solid #e8e8e8;
+  padding: 16px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* App name / logo text */
+.header-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #333333;
+  text-decoration: none;
+}
+
+/* Navigation links container */
+.header-nav {
+  display: flex;
+  gap: 16px;
+}
+
+/* Individual navigation links */
+.header-nav a {
+  text-decoration: none;
+  color: #555555;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.header-nav a:hover {
+  background-color: #f0f0f0;
+  color: #333333;
+}

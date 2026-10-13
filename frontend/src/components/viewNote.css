@@ -1,0 +1,44 @@
+/* =============================================
+   viewNote.css — View Note Page Styles
+   ============================================= */
+
+/* Container for viewing a single note */
+.view-note {
+  background-color: #ffffff;
+  border: 1px solid #e8e8e8;
+  border-radius: 10px;
+  padding: 30px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.view-note h2 {
+  font-size: 26px;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 8px;
+}
+
+/* Date displayed below the title */
+.view-note-date {
+  font-size: 13px;
+  color: #aaaaaa;
+  margin-bottom: 20px;
+}
+
+/* Note content area */
+.view-note-content {
+  font-size: 16px;
+  color: #555555;
+  line-height: 1.8;
+  white-space: pre-wrap;  /* Preserve line breaks in the content */
+  margin-bottom: 24px;
+  border-top: 1px solid #eeeeee;
+  padding-top: 20px;
+}
+
+/* Action buttons at the bottom */
+.view-note-actions {
+  display: flex;
+  gap: 10px;
+}

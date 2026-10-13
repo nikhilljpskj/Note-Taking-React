@@ -1,0 +1,11 @@
+/* =============================================
+   editNote.css — Edit Note Page Styles
+   =============================================
+   Re-uses the same form layout as createNote.css.
+   Kept as a separate file for clarity and easy customization. */
+
+/* Note: The form classes (.form-container, .form-group, etc.)
+   are already defined in createNote.css. If you want different
+   styling for the edit page, add overrides here. */
+
+/* No additional styles needed — shares createNote.css classes */

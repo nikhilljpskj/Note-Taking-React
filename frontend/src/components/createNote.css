@@ -1,0 +1,74 @@
+/* =============================================
+   createNote.css — Create Note Page Styles
+   ============================================= */
+
+/* Form container */
+.form-container {
+  background-color: #ffffff;
+  border: 1px solid #e8e8e8;
+  border-radius: 10px;
+  padding: 30px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-container h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #333333;
+}
+
+/* Form group — wraps label + input */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #555555;
+  margin-bottom: 6px;
+}
+
+/* Text input styling */
+.form-group input {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 15px;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.2s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #4a90d9;
+}
+
+/* Textarea styling */
+.form-group textarea {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 15px;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  resize: vertical;
+  min-height: 160px;
+  transition: border-color 0.2s ease;
+}
+
+.form-group textarea:focus {
+  outline: none;
+  border-color: #4a90d9;
+}
+
+/* Button row at bottom of form */
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
