@@ -1,0 +1,144 @@
+/* =============================================
+   categories.css — Categories Page Styles
+   ============================================= */
+
+.categories-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.categories-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.categories-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333333;
+}
+
+/* Card for the Add Category Form */
+.add-category-card {
+  background-color: #ffffff;
+  border: 1px solid #e8e8e8;
+  border-radius: 10px;
+  padding: 24px;
+  margin-bottom: 30px;
+}
+
+.add-category-card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #333333;
+}
+
+.add-category-form {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.add-category-input {
+  flex: 1;
+  min-width: 220px;
+  padding: 10px 14px;
+  font-size: 15px;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+}
+
+.add-category-input:focus {
+  outline: none;
+  border-color: #4a90d9;
+}
+
+/* Color input picker styling */
+.color-picker-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #666666;
+}
+
+.color-input {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  cursor: pointer;
+  background: transparent;
+}
+
+/* Grid of categories */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 16px;
+}
+
+.category-card {
+  background-color: #ffffff;
+  border: 1px solid #e8e8e8;
+  border-radius: 10px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Colored accent bar on the left of each card */
+.category-card-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 6px;
+}
+
+.category-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-left: 6px;
+}
+
+.category-badge-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333333;
+}
+
+.category-count {
+  font-size: 13px;
+  color: #777777;
+  padding-left: 6px;
+  margin-bottom: 16px;
+}
+
+.category-card-actions {
+  display: flex;
+  gap: 8px;
+  padding-left: 6px;
+}
+
+.category-card-actions .btn {
+  padding: 6px 12px;
+  font-size: 13px;
+}

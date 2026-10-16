@@ -2,45 +2,45 @@
 // EditNote.jsx — Edit Note Page Component
 // =============================================
 // This component loads an existing note and lets the user
-// edit its title and content. It demonstrates:
+// edit its title, category, and content.
+// It demonstrates:
 // - useParams: reading the note ID from the URL
-// - useEffect: fetching data when the component loads
-// - Pre-filling a form with existing data
-// - API PUT request: updating data on the backend
+// - Pre-filling a form with existing database data
+// - Updating relational data (category_id)
+// - API PUT request for updates
 
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import './createNote.css';  // Reuse the same form styles
-import './editNote.css';    // Any edit-specific overrides
+import './createNote.css';  // Reuse form styling
+import './editNote.css';
 
 function EditNote() {
-  // ---- Get the Note ID from the URL ----
-  // useParams extracts dynamic parameters from the URL
-  // For /edit/5, id would be "5"
   const { id } = useParams();
 
-  // State for form fields
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [categoryId, setCategoryId] = useState('');
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Hook for programmatic navigation
   const navigate = useNavigate();
 
-  // ---- Fetch the Existing Note ----
-  // Load the note data when the component mounts
+  // Load existing note data and available categories
   useEffect(() => {
-    const fetchNote = async () => {
+    const fetchData = async () => {
       try {
-        // Get the note by ID from the backend
-        const response = await axios.get(`http://localhost:5000/api/notes/${id}`);
+        const [noteRes, categoriesRes] = await Promise.all([
+          axios.get(`http://localhost:5000/api/notes/${id}`),
+          axios.get('http://localhost:5000/api/categories'),
+        ]);
 
-        // Pre-fill the form with the existing note data
-        setTitle(response.data.title);
-        setContent(response.data.content);
+        setTitle(noteRes.data.title);
+        setContent(noteRes.data.content);
+        setCategoryId(noteRes.data.category_id || '');
+        setCategories(categoriesRes.data);
       } catch (error) {
-        console.error('Error fetching note:', error);
+        console.error('Error fetching note details:', error);
         alert('Note not found.');
         navigate('/');
       } finally {
@@ -48,21 +48,19 @@ function EditNote() {
       }
     };
 
-    fetchNote();
-  }, [id, navigate]);  // Re-run if the id changes
+    fetchData();
+  }, [id, navigate]);
 
-  // ---- Handle Form Submission ----
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      // Send a PUT request to update the note
       await axios.put(`http://localhost:5000/api/notes/${id}`, {
         title,
         content,
+        category_id: categoryId || null,
       });
 
-      // Redirect to home page after successful update
       navigate('/');
     } catch (error) {
       console.error('Error updating note:', error);
@@ -70,17 +68,16 @@ function EditNote() {
     }
   };
 
-  // Show loading state while fetching
   if (loading) {
     return <p style={{ textAlign: 'center', marginTop: '40px' }}>Loading note...</p>;
   }
 
-  // ---- Render the Edit Form ----
   return (
     <div className="form-container">
       <h2>Edit Note</h2>
 
       <form onSubmit={handleSubmit}>
+        {/* Title */}
         <div className="form-group">
           <label htmlFor="title">Title</label>
           <input
@@ -93,6 +90,24 @@ function EditNote() {
           />
         </div>
 
+        {/* Category Select */}
+        <div className="form-group">
+          <label htmlFor="category">Category</label>
+          <select
+            id="category"
+            value={categoryId}
+            onChange={(e) => setCategoryId(e.target.value)}
+          >
+            <option value="">-- No Category (General) --</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Content */}
         <div className="form-group">
           <label htmlFor="content">Content</label>
           <textarea
@@ -104,6 +119,7 @@ function EditNote() {
           />
         </div>
 
+        {/* Action Buttons */}
         <div className="form-actions">
           <button type="submit" className="btn btn-success">
             Update Note

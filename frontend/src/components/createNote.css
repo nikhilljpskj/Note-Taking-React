@@ -48,6 +48,23 @@
   border-color: #4a90d9;
 }
 
+/* Select dropdown styling */
+.form-group select {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 15px;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  background-color: #ffffff;
+  transition: border-color 0.2s ease;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: #4a90d9;
+}
+
 /* Textarea styling */
 .form-group textarea {
   width: 100%;

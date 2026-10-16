@@ -10,6 +10,7 @@ const cors = require('cors');        // CORS allows frontend to talk to backend
 
 // Import our custom routes
 const notesRoutes = require('./routes/notesRoutes');
+const categoriesRoutes = require('./routes/categoriesRoutes');
 
 // Create an Express application
 const app = express();
@@ -31,6 +32,9 @@ app.use(express.json());
 // ---- Routes Setup ----
 // All requests starting with '/api/notes' will be handled by notesRoutes
 app.use('/api/notes', notesRoutes);
+
+// All requests starting with '/api/categories' will be handled by categoriesRoutes
+app.use('/api/categories', categoriesRoutes);
 
 // ---- Start the Server ----
 app.listen(PORT, () => {

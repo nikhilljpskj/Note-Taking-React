@@ -3,40 +3,49 @@
 // =============================================
 // This component renders a form to create a new note.
 // It demonstrates:
-// - Controlled components: form inputs tied to state
-// - Form handling: onSubmit, onChange events
-// - API POST request: sending data to the backend
-// - Navigation: redirecting after successful creation
+// - Controlled components: form inputs and select dropdown tied to state
+// - Fetching category options from API to populate dropdown
+// - Sending relational foreign key (category_id) in POST request
+// - Form submission and programmatic navigation
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import './createNote.css';
 
 function CreateNote() {
-  // ---- State for Form Fields ----
-  // Each input field has its own state variable.
-  // When the user types, the state updates, and the input re-renders.
-  const [title, setTitle] = useState('');     // Stores the note title
-  const [content, setContent] = useState(''); // Stores the note content
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [categoryId, setCategoryId] = useState('');
+  const [categories, setCategories] = useState([]);
 
-  // useNavigate hook lets us redirect to another page after saving
   const navigate = useNavigate();
 
-  // ---- Handle Form Submission ----
-  // This function runs when the user clicks "Save Note"
+  // Fetch available categories to populate the dropdown
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/categories');
+        setCategories(response.data);
+      } catch (error) {
+        console.error('Error loading categories:', error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   const handleSubmit = async (event) => {
-    // Prevent the browser from reloading the page (default form behavior)
     event.preventDefault();
 
     try {
-      // Send a POST request with the note data to our backend API
       await axios.post('http://localhost:5000/api/notes', {
-        title,    // Same as title: title (ES6 shorthand)
-        content,  // Same as content: content
+        title,
+        content,
+        category_id: categoryId || null,
       });
 
-      // After successful creation, redirect to the home page
+      // Redirect to home page
       navigate('/');
     } catch (error) {
       console.error('Error creating note:', error);
@@ -44,12 +53,10 @@ function CreateNote() {
     }
   };
 
-  // ---- Render the Form ----
   return (
     <div className="form-container">
       <h2>Create New Note</h2>
 
-      {/* onSubmit calls handleSubmit when the form is submitted */}
       <form onSubmit={handleSubmit}>
         {/* Title Input */}
         <div className="form-group">
@@ -58,10 +65,27 @@ function CreateNote() {
             type="text"
             id="title"
             placeholder="Enter note title"
-            value={title}                          // Controlled: value comes from state
-            onChange={(e) => setTitle(e.target.value)}  // Update state when user types
-            required                                // HTML5 validation: field must not be empty
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
           />
+        </div>
+
+        {/* Category Dropdown */}
+        <div className="form-group">
+          <label htmlFor="category">Category (Optional)</label>
+          <select
+            id="category"
+            value={categoryId}
+            onChange={(e) => setCategoryId(e.target.value)}
+          >
+            <option value="">-- No Category (General) --</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* Content Textarea */}

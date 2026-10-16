@@ -10,6 +10,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 /* App name / logo text */
@@ -23,7 +25,8 @@
 /* Navigation links container */
 .header-nav {
   display: flex;
-  gap: 16px;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 /* Individual navigation links */
@@ -31,7 +34,7 @@
   text-decoration: none;
   color: #555555;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 14px;
   padding: 6px 14px;
   border-radius: 6px;
   transition: background-color 0.2s ease, color 0.2s ease;
@@ -40,4 +43,11 @@
 .header-nav a:hover {
   background-color: #f0f0f0;
   color: #333333;
+}
+
+/* Active navigation link */
+.header-nav a.active-link {
+  background-color: #eaf2fb;
+  color: #2b70c9;
+  font-weight: 600;
 }

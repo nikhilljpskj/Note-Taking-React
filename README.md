@@ -1,6 +1,6 @@
 # 📝 Note Taking App
 
-A simple, beginner-friendly full-stack Note Taking application built with **React**, **Node.js**, **Express.js**, and **MySQL**. This project is designed to help beginners learn full-stack web development by building a complete CRUD (Create, Read, Update, Delete) application.
+A beginner-friendly, feature-packed full-stack Note Taking application built with **React**, **Node.js**, **Express.js**, and **MySQL**. This project is designed to help beginners learn full-stack web development through clean architecture, separated components, and real-world features like categories, archive management, search, and full CRUD operations.
 
 ## 🛠️ Tech Stack
 
@@ -14,131 +14,180 @@ A simple, beginner-friendly full-stack Note Taking application built with **Reac
 
 ```
 Note-Taking React/
-├── frontend/                 # React application
+├── database.sql              # Complete MySQL database creation script
+├── README.md                 # Project documentation and setup guide
+│
+├── frontend/                 # React client
 │   └── src/
-│       ├── App.js            # Main app with routes
-│       ├── App.css           # Global styles
-│       └── components/       # Reusable UI components
-│           ├── Header.jsx    # Navigation header
+│       ├── App.js            # Main application router
+│       ├── App.css           # Global layout, fonts, and button styles
+│       └── components/       # Reusable UI components with paired CSS
+│           ├── Header.jsx    # Navigation header with active links
+│           ├── header.css
 │           ├── Footer.jsx    # Page footer
-│           ├── Home.jsx      # Lists all notes
-│           ├── CreateNote.jsx# Form to create a note
-│           ├── EditNote.jsx  # Form to edit a note
-│           └── ViewNote.jsx  # View note details
+│           ├── footer.css
+│           ├── Home.jsx      # All active notes + search + category filter chips
+│           ├── home.css
+│           ├── CreateNote.jsx# Form to create note with category dropdown
+│           ├── createNote.css
+│           ├── EditNote.jsx  # Form to edit note with category dropdown
+│           ├── editNote.css
+│           ├── ViewNote.jsx  # Full note view with category badge & archive toggle
+│           ├── viewNote.css
+│           ├── Categories.jsx# Manage categories + note count per category
+│           ├── categories.css
+│           ├── Archive.jsx   # Archived notes view with Restore and Delete
+│           ├── archive.css
+│           ├── About.jsx     # Architectural guide and API reference
+│           └── about.css
 │
-├── backend/                  # Node.js + Express API
-│   ├── server.js             # Server entry point
-│   ├── config/db.js          # MySQL database connection
-│   ├── routes/notesRoutes.js # API route definitions
-│   └── controllers/notesController.js # CRUD logic
-│
-└── README.md                 # This file
+└── backend/                  # Node.js + Express API
+    ├── server.js             # Server entry point with CORS & route mounting
+    ├── config/
+    │   └── db.js             # MySQL database connection pool (mysql2/promise)
+    ├── routes/
+    │   ├── notesRoutes.js    # Notes API endpoints (CRUD, archive, restore)
+    │   └── categoriesRoutes.js # Categories API endpoints
+    └── controllers/
+        ├── notesController.js # Notes business logic & MySQL queries
+        └── categoriesController.js # Categories business logic & queries
 ```
 
 ## 🗄️ Database Setup
 
-### Step 1: Install MySQL
-
-Make sure MySQL is installed and running. You can use [XAMPP](https://www.apachefriends.org/), [WAMP](https://www.wampserver.com/), or a standalone MySQL installation.
-
-### Step 2: Create the Database and Table
-
-Open **MySQL Workbench**, **phpMyAdmin**, or the MySQL command line and run the following SQL commands:
+You can run the complete script found in [`database.sql`](./database.sql) directly in **MySQL Workbench**, **phpMyAdmin**, or the MySQL command line:
 
 ```sql
--- Create the database
+-- Create database
 CREATE DATABASE IF NOT EXISTS notes_app;
-
--- Select the database
 USE notes_app;
 
--- Create the notes table
+-- Create categories table
+CREATE TABLE IF NOT EXISTS categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    color VARCHAR(20) DEFAULT '#4a90d9',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create notes table with category relationship and archive flag
 CREATE TABLE IF NOT EXISTS notes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    category_id INT NULL,
+    is_archived TINYINT(1) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
 );
+
+-- Insert sample categories
+INSERT INTO categories (name, color) VALUES
+('General', '#6c757d'),
+('Work', '#0d6efd'),
+('Personal', '#198754'),
+('Study', '#e67e22'),
+('Ideas', '#6f42c1')
+ON DUPLICATE KEY UPDATE name = name;
 ```
 
-### Step 3: Update Database Credentials (if needed)
+> **Upgrading an existing table?** If you already had an earlier version of the `notes` table, run:
+> ```sql
+> ALTER TABLE notes ADD COLUMN category_id INT NULL;
+> ALTER TABLE notes ADD COLUMN is_archived TINYINT(1) DEFAULT 0;
+> ALTER TABLE notes ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+> ALTER TABLE notes ADD CONSTRAINT fk_notes_category FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL;
+> ```
 
-Open `backend/config/db.js` and update the MySQL username and password if yours differ from the defaults:
+### Database Credentials
+
+Open `backend/config/db.js` and update your MySQL username or password if different from defaults:
 
 ```javascript
 const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',          // ← Your MySQL username
-  password: '',           // ← Your MySQL password
+  password: '',          // ← Your MySQL password
   database: 'notes_app',
 });
 ```
 
 ## 🚀 How to Run the Application
 
-### Backend (API Server)
+### 1. Start the Backend API
 
 ```bash
-# 1. Navigate to the backend folder
+# Navigate to the backend folder
 cd backend
 
-# 2. Install dependencies
+# Install dependencies (if not already done)
 npm install
 
-# 3. Start the server
+# Start the Express server
 npm start
 
-# Server runs on http://localhost:5000
+# Server will run on http://localhost:5000
 ```
 
-### Frontend (React App)
+### 2. Start the Frontend React App
 
 ```bash
-# 1. Open a new terminal and navigate to the frontend folder
+# Open a new terminal and navigate to the frontend folder
 cd frontend
 
-# 2. Install dependencies
+# Install dependencies (if not already done)
 npm install
 
-# 3. Start the React development server
+# Start the React development server
 npm start
 
-# App opens on http://localhost:3000
+# App will open automatically on http://localhost:3000
 ```
+
+## 📱 Application Screens & Features
+
+- **Home (`/`)**: Displays all active notes. Features instant search (by title or content), category filter chips, note counts, and quick archive/delete actions.
+- **Create Note (`/create`)**: Form with title, category dropdown selection, and note content.
+- **View Note (`/note/:id`)**: Full-page preview with category pill badge, creation date, and options to edit, archive, or delete.
+- **Edit Note (`/edit/:id`)**: Pre-populated form to update note content or re-assign category.
+- **Categories (`/categories`)**: Create and delete categories with a color picker; shows active note counts per category using SQL `LEFT JOIN` and `COUNT()`.
+- **Archive (`/archive`)**: View soft-deleted/archived notes with one-click "Restore" to Home or permanent delete.
+- **About (`/about`)**: Architecture diagrams, full-stack concepts, and complete API reference.
 
 ## 📡 API Endpoints
 
-| Method   | Endpoint           | Description            |
-| -------- | ------------------ | ---------------------- |
-| `GET`    | `/api/notes`       | Get all notes          |
-| `GET`    | `/api/notes/:id`   | Get a single note      |
-| `POST`   | `/api/notes`       | Create a new note      |
-| `PUT`    | `/api/notes/:id`   | Update an existing note|
-| `DELETE` | `/api/notes/:id`   | Delete a note          |
+| Method   | Endpoint                  | Description                               |
+| -------- | ------------------------- | ----------------------------------------- |
+| `GET`    | `/api/notes`              | Get all active notes (`?category_id=` & `?q=`) |
+| `GET`    | `/api/notes/archived`     | Get all archived notes                    |
+| `GET`    | `/api/notes/:id`          | Get single note with category info        |
+| `POST`   | `/api/notes`              | Create a new note                         |
+| `PUT`    | `/api/notes/:id`          | Update note details                       |
+| `PATCH`  | `/api/notes/:id/archive`  | Move note to archive (`is_archived = 1`)  |
+| `PATCH`  | `/api/notes/:id/restore`  | Restore note to active (`is_archived = 0`)|
+| `DELETE` | `/api/notes/:id`          | Permanently delete a note                 |
+| `GET`    | `/api/categories`         | Get all categories with note count        |
+| `POST`   | `/api/categories`         | Create a new category with color          |
+| `DELETE` | `/api/categories/:id`     | Delete a category                         |
 
 ## 📚 What You Will Learn
 
-By building this project, you will learn:
-
-- **React Basics**: Components, JSX, Props, State, Hooks (`useState`, `useEffect`)
-- **React Router**: Client-side navigation, route parameters, `useNavigate`, `useParams`
-- **Forms in React**: Controlled components, form submission, input handling
-- **API Calls**: Using Axios to send HTTP requests (GET, POST, PUT, DELETE)
-- **Node.js & Express**: Building a REST API, middleware, routing
-- **MySQL**: Writing SQL queries, database connection, CRUD operations
-- **Project Structure**: Organizing code into components, routes, controllers
-- **Error Handling**: Try-catch blocks, HTTP status codes, user feedback
+- **React State & Effects**: Dynamic lists, controlled inputs, color pickers, and URL search parameters (`useSearchParams`).
+- **React Router v6**: Clean navigation layout, dynamic routes (`:id`), and `NavLink` active states.
+- **Relational Databases (MySQL)**: Multi-table schemas, foreign keys, `LEFT JOIN`, `GROUP BY`, and `COUNT()`.
+- **RESTful API Design**: Express routers, controllers, HTTP status codes, and parameterized queries for security.
+- **Full-Stack Lifecycle**: Transitioning data from Active to Archived, filtered queries, and soft-delete vs hard-delete patterns.
 
 ## ❓ Troubleshooting
 
 | Problem | Solution |
 | ------- | -------- |
-| `ECONNREFUSED` error | Make sure MySQL is running and credentials in `db.js` are correct |
-| Port 5000 already in use | Change the PORT in `backend/server.js` |
-| Port 3000 already in use | React will ask if you want to use a different port — press `Y` |
-| CORS errors in browser | Make sure the backend server is running before the frontend |
-| `Module not found` errors | Run `npm install` in both `frontend/` and `backend/` folders |
+| `ECONNREFUSED` error | Make sure MySQL is running in XAMPP/WAMP/Service and credentials in `db.js` match |
+| Port 5000 in use | Change `PORT` in `backend/server.js` |
+| Port 3000 in use | React prompts to use another port — type `Y` |
+| CORS errors | Verify the backend server is running on `http://localhost:5000` |
 
 ## 📝 License
 
-This project is open source and available for learning purposes.
+This project is open-source and created for educational purposes.

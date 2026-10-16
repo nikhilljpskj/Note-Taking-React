@@ -5,7 +5,6 @@
 // It sets up the layout (Header, Footer) and
 // defines all the page routes using React Router.
 
-// Import React Router components for navigation
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // Import global styles
@@ -18,12 +17,12 @@ import Home from './components/Home';
 import CreateNote from './components/CreateNote';
 import ViewNote from './components/ViewNote';
 import EditNote from './components/EditNote';
+import Categories from './components/Categories';
+import Archive from './components/Archive';
+import About from './components/About';
 
-// The App component wraps everything in a Router
-// and defines which component to show for each URL path
 function App() {
   return (
-    // Router enables client-side navigation (no full page reloads)
     <Router>
       <div className="app-container">
         {/* Header appears on every page */}
@@ -32,18 +31,26 @@ function App() {
         {/* Main content area — changes based on the current URL */}
         <main className="main-content">
           <Routes>
-            {/* Home page — shows list of all notes */}
+            {/* Home page — shows list of all active notes with search & category filters */}
             <Route path="/" element={<Home />} />
 
-            {/* Create page — form to add a new note */}
+            {/* Create page — form to add a new note with category selection */}
             <Route path="/create" element={<CreateNote />} />
 
             {/* View page — shows details of a single note */}
-            {/* :id is a dynamic parameter (e.g., /note/5) */}
             <Route path="/note/:id" element={<ViewNote />} />
 
             {/* Edit page — form to update an existing note */}
             <Route path="/edit/:id" element={<EditNote />} />
+
+            {/* Categories page — manage note categories */}
+            <Route path="/categories" element={<Categories />} />
+
+            {/* Archive page — view, restore, or delete archived notes */}
+            <Route path="/archive" element={<Archive />} />
+
+            {/* About page — overview of architecture and full-stack concepts */}
+            <Route path="/about" element={<About />} />
           </Routes>
         </main>
 
@@ -54,5 +61,4 @@ function App() {
   );
 }
 
-// Export App so index.js can render it
 export default App;

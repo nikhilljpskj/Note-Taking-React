@@ -1,31 +1,41 @@
 // =============================================
 // Header.jsx — Navigation Header Component
 // =============================================
-// This component displays the app name and navigation links.
+// This component displays the app branding and navigation links.
 // It appears at the top of every page.
-// We use the <Link> component from React Router for navigation
-// instead of <a> tags to avoid full page reloads.
+// We use NavLink from react-router-dom so the active page can be highlighted.
 
-import { Link } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import './header.css';
 
-// Header is a functional component (the simplest type of React component)
 function Header() {
   return (
     <header className="header">
-      {/* App name — clicking it goes to the home page */}
+      {/* App branding */}
       <Link to="/" className="header-title">
         📝 My Notes
       </Link>
 
       {/* Navigation links */}
       <nav className="header-nav">
-        <Link to="/">Home</Link>
-        <Link to="/create">+ New Note</Link>
+        <NavLink to="/" end className={({ isActive }) => (isActive ? 'active-link' : '')}>
+          Home
+        </NavLink>
+        <NavLink to="/create" className={({ isActive }) => (isActive ? 'active-link' : '')}>
+          + New Note
+        </NavLink>
+        <NavLink to="/categories" className={({ isActive }) => (isActive ? 'active-link' : '')}>
+          Categories
+        </NavLink>
+        <NavLink to="/archive" className={({ isActive }) => (isActive ? 'active-link' : '')}>
+          Archive
+        </NavLink>
+        <NavLink to="/about" className={({ isActive }) => (isActive ? 'active-link' : '')}>
+          About
+        </NavLink>
       </nav>
     </header>
   );
 }
 
-// Export the component so other files can import and use it
 export default Header;
